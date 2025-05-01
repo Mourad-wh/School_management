@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2&family=Fredoka+One&display=swap" rel="stylesheet">
+    <title>Add Teacher</title>
+    <style>
+        body {
+            background-color: #f9faff;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        .navbar {
+        background-color: #9fc3f8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        border-bottom: 4px solid #6c5ce7;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+        font-family: 'Fredoka One', cursive;
+        font-size: 1.8rem;
+        color: white;
+        }
+
+        .navbar ul {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+        margin: 0;
+        padding: 0;
+        }
+
+        .navbar li a {
+        text-decoration: none;
+        color: rgb(74, 74, 74);
+        font-weight: bold;
+        transition: color 0.3s;
+        }
+
+        .navbar li a:hover {
+        color: #ffd6e8;
+        }
+
+        .authentification {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .formsection {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px;
+            z-index: 1;
+            background-color: #f9faff; /* semi-transparent white */
+        }
+
+        .formsection h1 {
+            margin-bottom: 20px;
+            font: bold;
+        }
+
+        .formsection form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .formsection label {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .formsection input,
+        .formsection button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .formsection button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        #bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Educa</div>
+        <ul>
+          <li><a href="#">Classes</a></li>
+          <li><a href="#">Teachers</a></li>
+          <li><a href="#">Abscence</a></li>
+          <li><a href="#">Exams</a></li>
+          <li><a href="#">Timetables</a></li>
+        </ul>
+    </nav>
+
+      
+    <div class="authentification">
+        <video autoplay loop muted playsinline id="bg-video">
+            <source src="../images/authentificaton.mp4" type="video/mp4">
+        </video>
+        <div class="formsection">
+          <h1>ADD STUDENT</h1>
+          <form id="addStudentForm">
+            <label for="name">Personnal Name</label>
+            <input type="text" id="pname" name="pname" placeholder="Enter student's name" required>
+
+            <label for="name">Family Name</label>
+            <input type="text" id="fname" name="fname" placeholder="Enter student's family name" required>
+      
+            <label for="date">Date of Birth</label>
+            <input type="date" id="date" name="date" placeholder="DD/MM/YY" required>
+      
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+      
+            <input type="hidden" name="role" value="Student">
+            <button type="submit">Add Student</button>
+          </form>
+        </div>
+      
+      </div>
+
+    <script>
+        document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('../../includes/db.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            alert(result.message || result.error);
+        });
+    </script>
+</body>
+</html>
