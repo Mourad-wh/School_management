@@ -1,0 +1,254 @@
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #222;
+    background: #eeeff27d;;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}
+
+/* Layout Styles */
+.main {
+    background: #fafafa7d;
+    padding: 150px 0;
+}
+
+.container {
+    width: 1200px;
+    max-width: 100%;
+    background: #fffefe;
+    margin: 0 auto;
+    box-shadow: 0px 15px 16.83px 0.17px rgba(245, 245, 245, 0.05);
+    border-radius: 20px;
+}
+
+/* Flex Utilities */
+.display-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.display-flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Signin Content */
+.signin-content {
+    padding: 75px 0;
+    display: flex;
+}
+
+.signin-form, .signin-image {
+    width: 50%;
+    overflow: hidden;
+}
+
+.signin-image {
+    margin: 0 55px;
+    text-align: center;
+}
+
+.signin-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Form Styles */
+.form-title {
+    color: #04207b;
+    font-weight: bold;
+    margin-bottom: 33px;
+    font-size: 36px;
+    line-height: 1.66;
+}
+
+.register-form {
+    width: 100%;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #222;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: none;
+    border-bottom: 1px solid #999;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-bottom: 1px solid #222;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #999;
+    font-size: 16px;
+    background-color: transparent;
+    appearance: none;
+}
+
+.form-button {
+    margin-top: 25px;
+}
+
+.form-submit {
+    display: inline-block;
+    background: #04207b;
+    color: #fff;
+    border: none;
+    padding: 15px 39px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.form-submit:hover {
+    background: #c7ddf1;
+}
+/* Style pour le conteneur de sélection */
+.form-group {
+  margin-bottom: 25px;
+}
+
+/* Style pour la boîte de sélection */
+.select-box {
+  position: relative;
+  width: 100%;
+}
+
+.select-box select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #04207b; 
+  border-radius: 8px;
+  background-color: #dfe9fd; 
+  color: #04207b;
+  font-size: 16px;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Flèche personnalisée */
+.select-box::after {
+  content: "▼";
+  font-size: 12px;
+  color: #04207b;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Effet au survol/focus */
+.select-box select:hover {
+  border-color: #04207b; 
+}
+
+.select-box select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(183, 201, 251, 0.3); /* Ombre brune */
+}
+
+/* Options de la liste */
+.select-box option {
+  padding: 10px;
+  background: #fff;
+  color:#04207b;
+}
+
+/* Alert Styles */
+.alert {
+    padding: 10px;
+    background-color: #ffffff;
+    color: #8d0d20;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Home Link */
+.home-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #04207b;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.home-link:hover {
+    text-decoration: underline;
+}
+
+/* Logo Container */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    max-width: 400px;
+    height: auto;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .signin-content {
+        flex-direction: column;
+    }
+    
+    .signin-form, .signin-image {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .signin-image {
+        margin-top: 30px;
+        order: 2;
+    }
+    
+    .signin-form {
+        order: 1;
+        padding: 0 30px;
+    }
+    
+    .container {
+        width: calc(100% - 30px);
+    }
+    
+    .form-title {
+        text-align: center;
+    }
+    
+    .form-button {
+        text-align: center;
+    }
+}

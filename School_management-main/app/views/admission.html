@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission - LearnBridge</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+   <!-- Navbar et Header -->
+    <section class="header" id="top">
+        <nav>
+            <a href="index.html"><img src="images/logo.png" alt="LearnBridge Marrakech"></a>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="index.php#top">Accueil</a></li>
+                    <li><a href="index.php#presentation">L'École</a></li>
+                    <li><a href="index.php#formations">Formations</a></li>  
+                    <li><a href="index.php#recherche">Recherche</a></li>
+                    <li><a href="index.php#contact">Contact</a></li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Pages</i></a>
+                        <div class="dropdown-content">
+                            <a href="admission.html">Admission</a>
+                            <a href="temoignages.html">Témoignages</a>
+                            <a href="faq.html">FAQ</a>
+                        </div>
+                    </li>
+                    
+                    <li><a href="LOG/login.php" class="login-btn">Connexion</a></li>
+                </ul>
+            </div>
+            <div class="mobile-menu" onclick="toggleMenu()">☰</div>
+        </nav>
+
+        <div class="text-box">
+            <h1>Admission LearnBridge</h1>
+            <p>Rejoignez une institution de référence en formation d'ingénieurs à Marrakech</p>
+            <div class="info-box">
+                <p>
+                    Nous vous remercions de l'intérêt que vous portez à <strong>LearnBridge</strong> Pour démarrer votre processus d'admission, veuillez remplir ce formulaire. 
+                    Une fois votre demande reçue, notre équipe vous contactera pour fixer un rendez-vous et discuter des prochaines étapes.
+                    Nous sommes impatients de vous accompagner dans votre parcours académique et de vous aider à rejoindre notre institution.
+                </p>
+            </div>
+            
+              
+        </div>
+    </section>
+
+    <!-- Formulaire d'admission -->
+    <section class="admission-form">
+        <div class="admission-header">
+            <h1>Formulaire d'admission</h1>
+            <p class="subtitle">Merci de remplir les informations ci-dessous pour postuler à l'université LearnBridge</p>
+        </div>
+
+        <form action="process_form.php" method="POST">
+            <div class="form-group">
+                <label for="name"><i class="fas fa-user"></i> Nom complet</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+ 
+            <div class="form-group">
+                <label for="phone"><i class="fas fa-phone"></i> Téléphone</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address"><i class="fas fa-map-marker-alt"></i> Adresse</label>
+                <input type="text" id="address" name="address">
+            </div>
+
+            <div class="form-group">
+                <label for="date-naissance"><i class="fas fa-calendar"></i> Date de naissance</label>
+                <input type="date" id="date-naissance" name="date-naissance">
+            </div>
+
+            <div class="form-group">
+                <label for="bac"><i class="fas fa-certificate"></i> Type de bac</label>
+                <select id="bac" name="bac">
+                    <option value="">-- Sélectionner --</option>
+                    <option value="scientifique">Scientifique</option>
+                    <option value="technique">Technique</option>
+                    <option value="eco">Eco/Gestion</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="niveau"><i class="fas fa-graduation-cap"></i> Niveau d'études actuel</label>
+                <input type="text" id="niveau" name="niveau">
+            </div>
+
+            <div class="form-group">
+                <label for="filiere"><i class="fas fa-code"></i> Filière souhaitée</label>
+                <select id="filiere" name="filiere">
+                    <option value="">-- Choisissez une filière --</option>
+                    <option value="cyber">Génie Cyber-Défense</option>
+                    <option value="indus">Génie Industriel</option>
+                    <option value="info">Génie Informatique</option>
+                    <option value="reseaux">Réseaux & Services</option>
+                    <option value="electronique">Systèmes Embarqués</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message"><i class="fas fa-comment"></i> Message ou motivation</label>
+                <textarea id="message" name="message" rows="4"></textarea>
+            </div> 
+
+            <div class="form-group">
+                <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Envoyer la candidature</button>
+            </div>
+        </form>
+    </section>
+        <!-- Footer -->
+     
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="LearnBridge Marrakech">
+                    <p>LearnBridge, votre passerelle vers l'excellence en ingénierie à Marrakech.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.php#top">Accueil</a>
+                    <a href="index.php#presentation">L'École</a>
+                    <a href="index.php#formations">Formations</a>
+                    <a href="index.php#recherche">Recherche</a>
+                    <a href="admission.html">Admission</a>
+                    <a href="temoignages.html">Témoignages</a>
+                    <a href="faq.html">FAQ</a>
+    
+    
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <div class="footer-contact">
+                    <h3><i class="fas fa-building"></i> CONTACT</h3>
+    
+                    <p><strong>LearnBridge</strong><br>
+                       BP 7540 Avenue Abdelkrim Khattabi<br>
+                       Guéliz - Marrakech<br></p>
+                       <p><i class="fas fa-phone"></i> (+212) 06 00 00 00 00</p>
+                       <p><i class="fas fa-envelope"></i> learnbridge@uca.ac.ma</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2025 LearnBridge - Tous droits réservés</p>
+        </div>
+        </footer>
+    
+</body>
+</html>
