@@ -1,97 +1,71 @@
-<?php 
-session_start();
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="main">
+        <section class="sign-in">
+            <div class="container">
+                <div class="signin-content display-flex">
+                    <div class="signin-image">
+                        <figure><img src="img/signin.jpg" alt="Image de connexion"></figure>
+                    </div>
+                    <?php if (isset($_GET['error'])): ?>
+                    <div class="alert" role="alert">
+                        <?= htmlspecialchars($_GET['error']) ?>
+                    </div>
+                    <?php endif; ?>
 
-if (isset($_POST['username']) &&
-    isset($_POST['password']) &&
-    isset($_POST['role'])) {
+                    <div class="signin-form">
+                        <div class="logo-container">
+                            <img src="img/logo.png" alt="Logo" class="logo-image">
+                        </div>
 
-    include "../DB_connection.php";
-    
-    $uname = $_POST['username'];
-    $pass = $_POST['password'];
-    $role = $_POST['role'];
+                        <h2 class="form-title">Connexion</h2>
 
-    if (empty($uname)) {
-        $em  = "Username is required";
-        header("Location: ../login.php?error=$em");
-        exit;
-    } else if (empty($pass)) {
-        $em  = "Password is required";
-        header("Location: ../login.php?error=$em");
-        exit;
-    } else if (empty($role)) {
-        $em  = "An error occurred";
-        header("Location: ../login.php?error=$em");
-        exit;
-    } else {
-        
-        if ($role == '1'){
-            $sql = "SELECT * FROM admin WHERE username = ?";
-            $role = "Admin";
-        } else if ($role == '2') {
-            $sql = "SELECT * FROM teachers WHERE username = ?";
-            $role = "Professeur";
-        } else if ($role == '3') {
-            $sql = "SELECT * FROM students WHERE username = ?";
-            $role = "Etudiant";
-        } else {
-            $em  = "An error occurred";
-            header("Location: ../login.php?error=$em");
-            exit;
-        }
+                        <form method="POST" class="register-form" id="login-form" action="req/login.php">
+                            <div class="form-group">
+                                <label for="username"></label>
+                                <input  type="text" name="username" id="username" placeholder="Nom d'utilisateur" required>
+                            </div>
 
-        try {
-            $stmt = $conn->prepare($sql);
-            $stmt->execute([$uname]);
+                            <div class="form-group">
+                                <label for="password"></label>
+                                <input type="password" name="password" id="password" placeholder="Mot de passe" required>
+                            </div>
 
-            if ($stmt->rowCount() == 1) {
-                $user = $stmt->fetch();
-                $username = $user['username'];
-                $hashedPassword = $user['password']; // This is the hashed password in the database
-                
-                if ($username == $uname) {
-                    // Use password_verify to check if the entered password matches the hash stored in the database
-                    if (password_verify($pass, $hashedPassword)) {
-                        $_SESSION['role'] = $role;
-                        
-                        if ($role == 'Admin') {
-                            $id = $user['admin_id'];
-                            $_SESSION['admin_id'] = $id;
-                            header("Location: ../../admin/dashboard.php");
-                            exit;
-                        } else if ($role == 'Etudiant') {
-                            $id = $user['id'];
-                            $_SESSION['student_id'] = $id;
-                            header("Location: ../../student/index.php");
-                            exit;
-                        } else if ($role == 'Professeur') {
-                            $id = $user['id'];
-                            $_SESSION['teacher_id'] = $id;
-                            header("Location: ../../teacher/Teacher/index.php");
-                            exit;
-                        }
-                    } else {
-                        $em  = "Incorrect Username or Password";
-                        header("Location: ../login.php?error=$em");
-                        exit;
-                    }
-                } else {
-                    $em  = "Incorrect Username or Password";
-                    header("Location: ../login.php?error=$em");
-                    exit;
-                }
-            } else {
-                $em  = "Incorrect Username or Password";
-                header("Location: ../login.php?error=$em");
-                exit;
-            }
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-            exit;
-        }
-    }
-} else {
-    header("Location: ../login.php");
-    exit;
-}
-?>
+                            <div class="form-group">
+                                <label for="role"></label>
+                                <div class="select-box">
+                                    <select name="role" id="role" required>
+                                        <option value="">Sélectionner un type d'utilisateur</option>
+                                        <option value="1">Admin</option>
+                                        <option value="2">Professeur</option>
+                                        <option value="3">Étudiant</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-button">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Se Connecter">
+                            </div>
+
+                            <div class="form-group">
+                                <a href="../index.php" class="home-link">Retour à l'accueil</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
