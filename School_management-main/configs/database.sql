@@ -775,6 +775,29 @@ ALTER TABLE `teacher_subject`
   ADD CONSTRAINT `teacher_subject_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`);
 COMMIT;
 
+-- Remove first_name column
+ALTER TABLE admin DROP COLUMN first_name;
+
+-- Rename last_name to full_name
+ALTER TABLE admin CHANGE COLUMN last_name full_name VARCHAR(100) NOT NULL;
+
+INSERT INTO admin (username, password, email, phone, school_id, id, full_name)
+VALUES ('saad', '$argon2i$v=19$m=65536,t=4,p=1$eHdKdWlMM0F0T2JaR0prYw$xQG8VAP7WzJg9gpsXhqNoqUMxYEH+SA8kabhf0guq2E', 'saadchaoulid0@example.com', '0655818229', '2202387', '5', 'Saad CHAOULID');
+
+
+UPDATE teachers
+SET username = 'teacher', password = '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI'
+WHERE username = 'fzahra';
+
+UPDATE students
+SET username = 'student', password = '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM'
+WHERE username = 'yelamrani';
+
+UPDATE admin
+SET password = '$argon2i$v=19$m=65536,t=4,p=1$Um9pWDJ6QXQzU0hZYnJJeA$Q7QXajqRJFsZ3f3gxeGv8yLG0S4SogmMIETZc13v1o4'
+WHERE username = 'admin';
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
