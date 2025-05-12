@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Insert student
                 $stmt = $conn->prepare("INSERT INTO students (full_name, email, phone, password, school_id) VALUES (?, ?, ?, ?, ?)");
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $hashedPassword = password_hash($password, PASSWORD_ARGON2I);
                 $stmt->bind_param("ssssi", $name, $email, $phone, $hashedPassword, $school_id);
                 $stmt->execute();
                 $student_id = $stmt->insert_id;
