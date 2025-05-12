@@ -29,7 +29,82 @@ function isStrongPassword($password) {
 
 // Add Teacher Functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_teacher'])) {
-    // [Previous add teacher code remains the same...]
+    try {
+        // Verify CSRF token
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            throw new Exception("Invalid request");
+        }
+
+        $conn->begin_transaction();
+        
+        // Get and validate form data
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $password = $_POST['password'];
+        $subjects = isset($_POST['subjects']) ? $_POST['subjects'] : [];
+        $classes = isset($_POST['classes']) ? $_POST['classes'] : [];
+        $school_id = "2202387";
+
+        // Validation
+        if (empty($name) || empty($email) || empty($password)) {
+            throw new Exception("All fields are required");
+        }
+
+        if (!isValidEmail($email)) {
+            throw new Exception("Invalid email format");
+        }
+
+        if (!isStrongPassword($password)) {
+            throw new Exception("Password must be at least 8 characters");
+        }
+
+        // Hash password
+        $hashedPassword = password_hash($password, PASSWORD_ARGON2I);
+
+        // Insert into teachers table
+        $stmt = $conn->prepare("INSERT INTO teachers (full_name, email, password, school_id) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $name, $email, $hashedPassword, $school_id);
+        $stmt->execute();
+        $teacher_id = $stmt->insert_id;
+        $stmt->close();
+
+        // Insert subjects
+        if (!empty($subjects)) {
+            $stmt = $conn->prepare("INSERT INTO teacher_subject (teacher_id, subject_id) VALUES (?, ?)");
+            foreach ($subjects as $subject_id) {
+                $subject_id = (int)$subject_id;
+                if ($subject_id > 0) {
+                    $stmt->bind_param("ii", $teacher_id, $subject_id);
+                    $stmt->execute();
+                }
+            }
+            $stmt->close();
+        }
+
+        // Insert classes
+        if (!empty($classes)) {
+            $stmt = $conn->prepare("INSERT INTO teacher_class (teacher_id, class_id) VALUES (?, ?)");
+            foreach ($classes as $class_id) {
+                $class_id = (int)$class_id;
+                if ($class_id > 0) {
+                    $stmt->bind_param("ii", $teacher_id, $class_id);
+                    $stmt->execute();
+                }
+            }
+            $stmt->close();
+        }
+
+        $conn->commit();
+        
+        $_SESSION['success_message'] = "Teacher added successfully";
+        header("Location: " . $_SERVER['PHP_SELF'], true, 303);
+        exit();
+
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log("Error adding teacher: " . $e->getMessage());
+        $error = "Error adding teacher: " . $e->getMessage();
+    }
 }
 
 // UPDATE teacher info
