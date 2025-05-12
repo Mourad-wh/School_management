@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 12 mai 2025 à 05:59
+-- Généré le : dim. 11 mai 2025 à 14:02
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `absence` (
 --
 
 INSERT INTO `absence` (`id`, `student_id`, `class_id`, `date`, `hours_absent`, `justification_file`, `is_validated`, `alert_sent`) VALUES
-(6, 23, 18, '2025-05-15', 2, '-- phpMyAdmin SQL Dump\n-- version 5.2.1\n-- https://www.phpmyadmin.net/\n--\n-- Hôte : 127.0.0.1\n-- Généré le : dim. 11 mai 2025 à 17:00\n-- Version du serveur : 10.4.32-MariaDB\n-- Version de PHP : 8.2.12\n\nSET SQL_MODE = \"NO_AUTO_VALUE_ON_ZERO\";\nSTART TRANSAC', 0, 0),
+(6, 23, 18, '2025-05-15', 2, NULL, 0, 1),
 (7, 28, 19, '2025-05-10', 1, NULL, 0, 1),
 (8, 35, 20, '2025-05-12', 3, NULL, 0, 0),
 (9, 42, 21, '2025-05-08', 2, NULL, 1, 0),
@@ -161,8 +161,7 @@ INSERT INTO `exam` (`id`, `name`, `date`, `subject_id`, `teacher_id`, `exam_type
 (11, 'Networks Midterm', '2025-06-12', 14, 12, 'onsite', '11:00:00', 21),
 (12, 'Software Engineering Project', '2025-06-20', 15, 13, 'onsite', '13:30:00', 22),
 (13, 'OS Final Exam', '2025-06-18', 16, 14, 'onsite', '09:00:00', 23),
-(14, 'Data Structures Quiz', '2025-06-08', 17, 15, 'qcm', '15:30:00', 24),
-(15, 'web qcm', '2025-05-14', 12, 10, 'qcm', NULL, NULL);
+(14, 'Data Structures Quiz', '2025-06-08', 17, 15, 'qcm', '15:30:00', 24);
 
 -- --------------------------------------------------------
 
@@ -187,40 +186,20 @@ CREATE TABLE `notes` (
 
 INSERT INTO `notes` (`id`, `student_id`, `subject_id`, `grade`, `exam_id`, `qcm`, `participation`, `class_id`) VALUES
 (9, 23, 11, 14.50, 8, 12.00, 15.00, 18),
-(10, 24, 11, 16.70, 8, 15.00, 17.50, 18),
-(11, 25, 11, 12.20, 8, 10.50, 13.00, 18),
-(12, 26, 11, 17.00, 8, 17.00, 18.50, 18),
-(13, 27, 11, 0.00, 8, 20.00, 16.00, 18),
-(14, 28, 12, 13.80, 9, 12.50, 14.00, 19),
-(15, 29, 12, 17.30, 9, 16.00, 17.50, 19),
-(16, 30, 12, 11.50, 9, 10.50, 12.00, 19),
+(10, 24, 11, 16.75, 8, 15.00, 17.50, 18),
+(11, 25, 11, 12.25, 8, 10.50, 13.00, 18),
+(12, 26, 11, 18.00, 8, 17.00, 18.50, 18),
+(13, 27, 11, 15.50, 8, 14.00, 16.00, 18),
+(14, 28, 12, 13.75, 9, 12.50, 14.00, 19),
+(15, 29, 12, 17.25, 9, 16.00, 17.50, 19),
+(16, 30, 12, 11.50, 9, 10.00, 12.00, 19),
 (17, 31, 12, 19.00, 9, 18.50, 19.00, 19),
-(18, 32, 12, 14.80, 9, 13.50, 15.00, 19),
+(18, 32, 12, 14.75, 9, 13.50, 15.00, 19),
 (19, 33, 13, 15.00, 10, 14.00, 15.50, 20),
 (20, 34, 13, 16.50, 10, 15.50, 17.00, 20),
 (21, 35, 13, 12.75, 10, 11.50, 13.00, 20),
 (22, 36, 13, 18.25, 10, 17.00, 18.50, 20),
-(23, 37, 13, 14.50, 10, 13.50, 15.00, 20),
-(27, 38, 14, NULL, NULL, NULL, NULL, 21),
-(28, 39, 14, NULL, NULL, NULL, NULL, 21),
-(29, 40, 14, NULL, NULL, NULL, NULL, 21),
-(30, 41, 14, NULL, NULL, NULL, NULL, 21),
-(31, 42, 14, NULL, NULL, NULL, NULL, 21),
-(34, 43, 15, NULL, NULL, NULL, NULL, 22),
-(35, 44, 15, NULL, NULL, NULL, NULL, 22),
-(36, 45, 15, NULL, NULL, NULL, NULL, 22),
-(37, 46, 15, NULL, NULL, NULL, NULL, 22),
-(38, 47, 15, NULL, NULL, NULL, NULL, 22),
-(41, 48, 16, 0.00, NULL, 15.00, 0.00, 23),
-(42, 49, 16, NULL, NULL, NULL, NULL, 23),
-(43, 50, 16, NULL, NULL, NULL, NULL, 23),
-(44, 51, 16, NULL, NULL, NULL, NULL, 23),
-(45, 52, 16, NULL, NULL, NULL, NULL, 23),
-(48, 53, 17, NULL, NULL, NULL, NULL, 24),
-(49, 54, 17, NULL, NULL, NULL, NULL, 24),
-(50, 55, 17, NULL, NULL, NULL, NULL, 24),
-(51, 56, 17, NULL, NULL, NULL, NULL, 24),
-(52, 57, 17, NULL, NULL, NULL, NULL, 24);
+(23, 37, 13, 14.50, 10, 13.50, 15.00, 20);
 
 -- --------------------------------------------------------
 
@@ -405,12 +384,7 @@ INSERT INTO `student_overall_average` (`id`, `student_id`, `class_id`, `overall_
 (0, 54, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
 (0, 57, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
 (0, 56, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
-(0, 53, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
-(0, 26, 18, 18.00, 'passed', '2025-05-12 00:48:39'),
-(0, 24, 18, 16.75, 'passed', '2025-05-12 00:48:39'),
-(0, 27, 18, 15.50, 'passed', '2025-05-12 00:48:39'),
-(0, 25, 18, 12.25, 'passed', '2025-05-12 00:48:39'),
-(0, 23, 18, 14.50, 'passed', '2025-05-12 00:48:39');
+(0, 53, 24, 0.00, 'failed', '2025-05-11 11:58:27');
 
 -- --------------------------------------------------------
 
@@ -660,13 +634,13 @@ ALTER TABLE `classes`
 -- AUTO_INCREMENT pour la table `exam`
 --
 ALTER TABLE `exam`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `notes`
 --
 ALTER TABLE `notes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `school`
@@ -800,6 +774,29 @@ ALTER TABLE `teacher_subject`
   ADD CONSTRAINT `teacher_subject_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`),
   ADD CONSTRAINT `teacher_subject_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`);
 COMMIT;
+
+-- Remove first_name column
+ALTER TABLE admin DROP COLUMN first_name;
+
+-- Rename last_name to full_name
+ALTER TABLE admin CHANGE COLUMN last_name full_name VARCHAR(100) NOT NULL;
+
+INSERT INTO admin (username, password, email, phone, school_id, id, full_name)
+VALUES ('saad', '$argon2i$v=19$m=65536,t=4,p=1$eHdKdWlMM0F0T2JaR0prYw$xQG8VAP7WzJg9gpsXhqNoqUMxYEH+SA8kabhf0guq2E', 'saadchaoulid0@example.com', '0655818229', '2202387', '5', 'Saad CHAOULID');
+
+
+UPDATE teachers
+SET username = 'teacher', password = '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI'
+WHERE username = 'fzahra';
+
+UPDATE students
+SET username = 'student', password = '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM'
+WHERE username = 'yelamrani';
+
+UPDATE admin
+SET password = '$argon2i$v=19$m=65536,t=4,p=1$Um9pWDJ6QXQzU0hZYnJJeA$Q7QXajqRJFsZ3f3gxeGv8yLG0S4SogmMIETZc13v1o4'
+WHERE username = 'admin';
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
