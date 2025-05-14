@@ -50,7 +50,7 @@ if (isset($_POST['username']) &&
                 $password = $user['password'];
                 
                 if ($username == $uname) {
-                    if ($pass === $password) {
+                    if (password_verify($pass, $password)) {
                         $_SESSION['role'] = $role;
                         
                         if ($role == 'Admin') {
