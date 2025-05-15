@@ -40,13 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_teacher'])) {
         // Get and validate form data
         $name = trim($_POST['name']);
         $email = trim($_POST['email']);
+        $username = trim($_POST['username']);
         $password = $_POST['password'];
         $subjects = isset($_POST['subjects']) ? $_POST['subjects'] : [];
         $classes = isset($_POST['classes']) ? $_POST['classes'] : [];
         $school_id = "2202387";
 
         // Validation
-        if (empty($name) || empty($email) || empty($password)) {
+        if (empty($name) || empty($email) || empty($password) || empty($username)) {
             throw new Exception("All fields are required");
         }
 
@@ -62,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_teacher'])) {
         $hashedPassword = password_hash($password, PASSWORD_ARGON2I);
 
         // Insert into teachers table
-        $stmt = $conn->prepare("INSERT INTO teachers (full_name, email, password, school_id) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $email, $hashedPassword, $school_id);
+        $stmt = $conn->prepare("INSERT INTO teachers (full_name, email, password, school_id, username) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $name, $email, $hashedPassword, $school_id, $username);
         $stmt->execute();
         $teacher_id = $stmt->insert_id;
         $stmt->close();
@@ -316,6 +317,11 @@ if (isset($_SESSION['success_message'])) {
                         <label for="name">Nom complet</label>
                         <input type="text" id="name" name="name" placeholder="Enter teacher's full name" required>
                     </div>
+
+                    <div class="form-group">
+                        <label for="usernamename">Nom d'utilisateur</label>
+                        <input type="text" id="username" name="username" placeholder="Enter teacher's username" required>
+                    </div>
                     
                     <div class="form-group">
                         <label for="email">Address Email</label>
@@ -351,7 +357,7 @@ if (isset($_SESSION['success_message'])) {
                 </form>
             </div>
             
-            <h2 style="margin-top: 40px; color: #04207b;"><i class="fas fa-chalkboard-teacher"></i>La list des profs</h2>
+            <h2 style="margin-top: 40px; color: #04207b;"><i class="fas fa-chalkboard-teacher"></i>La liste des profs</h2>
             <table>
                 <tr>
                     <th>Nom</th>
