@@ -60,7 +60,6 @@ $result = $conn->query($sql);
                 <li><a href="students.php" style="color: rgb(150, 20, 255)">Etudiants</a></li>
                 <li><a href="admin_absences.php">L'absence</a></li>
                 <li><a href="exams.php">Exams</a></li>
-                <li><a href="notes.php">Notes</a></li>
                 <li><a href="logout.php" class="login-btn">Déconnexion<i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
@@ -83,19 +82,8 @@ $result = $conn->query($sql);
                     <th>Email</th>
                     <th>Téléphone</th>
                     <th>Ecole</th>
-                    <th>Note</th>
                 </tr>
                 <?php while($row = $result->fetch_assoc()): 
-                    $mark_class = '';
-                    if ($row['average_mark'] >= 16) {
-                        $mark_class = 'mark-excellent';
-                    } elseif ($row['average_mark'] >= 14) {
-                        $mark_class = 'mark-good';
-                    } elseif ($row['average_mark'] >= 10) {
-                        $mark_class = 'mark-average';
-                    } elseif ($row['average_mark'] !== null) {
-                        $mark_class = 'mark-poor';
-                    }
                 ?>
                 <tr>
                     <td><?= htmlspecialchars($row['full_name']) ?></td>
@@ -103,9 +91,6 @@ $result = $conn->query($sql);
                     <td><?= htmlspecialchars($row['email']) ?></td>
                     <td><?= htmlspecialchars($row['phone']) ?></td>
                     <td><?= htmlspecialchars($row['school_name']) ?></td>
-                    <td class="<?= $mark_class ?>">
-                        <?= $row['average_mark'] !== null ? htmlspecialchars($row['average_mark']) : 'N/A' ?>
-                    </td>
                 </tr>
                 <?php endwhile; ?>
             </table>
