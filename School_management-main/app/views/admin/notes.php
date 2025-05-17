@@ -13,7 +13,9 @@ try {
 // Get all classes
 $classes = $conn->query("SELECT id, name FROM classes ORDER BY name");
 
-// Process form submission
+// Initialize results array
+$results = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
     $class_id = $conn->real_escape_string($_POST['class_id']);
 
@@ -34,55 +36,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
             $student_id = $student['id'];
             $full_name = $student['full_name'];
 
-            // Get subject averages for this student
-            $avg_query = $conn->query("
-                SELECT average 
-                FROM average 
-                WHERE student_id = $student_id AND average IS NOT NULL
+            // Get all grades per subject
+            $grades_query = $conn->query("
+                SELECT subject_id, grade, qcm, participation
+                FROM notes
+                WHERE student_id = $student_id
             ");
 
-            $total = 0;
-            $count = 0;
+            $grades_by_subject = [];
+
+            while ($row = $grades_query->fetch_assoc()) {
+                $subject_id = $row['subject_id'];
+                $grades_by_subject[$subject_id]['grades'][] = $row;
+            }
+
+            // Calculate averages
+            $total_average = 0;
+            $subject_count = 0;
             $subjects_below_12 = 0;
             $has_eliminatory = false;
 
-            while ($row = $avg_query->fetch_assoc()) {
-                $subject_avg = floatval($row['average']);
-                $total += $subject_avg;
-                $count++;
+            foreach ($grades_by_subject as $subject_id => $data) {
+                $subject_sum = 0;
+                $entry_count = 0;
 
-                if ($subject_avg < 12) {
-                    $subjects_below_12++;
+                foreach ($data['grades'] as $grade) {
+                    $entry_sum = 0;
+                    $entry_parts = 0;
+
+                    if (!is_null($grade['grade'])) {
+                        $entry_sum += $grade['grade'];
+                        $entry_parts++;
+                    }
+                    if (!is_null($grade['qcm'])) {
+                        $entry_sum += $grade['qcm'];
+                        $entry_parts++;
+                    }
+                    if (!is_null($grade['participation'])) {
+                        $entry_sum += $grade['participation'];
+                        $entry_parts++;
+                    }
+
+                    if ($entry_parts > 0) {
+                        $subject_sum += ($entry_sum / $entry_parts);
+                        $entry_count++;
+                    }
                 }
-                if ($subject_avg <= 8) {
-                    $has_eliminatory = true;
+
+                if ($entry_count > 0) {
+                    $subject_avg = $subject_sum / $entry_count;
+                    $total_average += $subject_avg;
+                    $subject_count++;
+
+                    if ($subject_avg < 12) {
+                        $subjects_below_12++;
+                    }
+                    if ($subject_avg <= 8) {
+                        $has_eliminatory = true;
+                    }
                 }
             }
 
-            $overall_avg = $count > 0 ? round($total / $count, 2) : 0;
-            $result = ($overall_avg >= 12 && $subjects_below_12 < 4 && !$has_eliminatory) ? 'passed' : 'failed';
+            $overall_average = $subject_count > 0 ? round($total_average / $subject_count, 2) : 0;
+            $result = ($overall_average >= 12 && $subjects_below_12 < 4 && !$has_eliminatory) ? 'Passed' : 'Failed';
+            $has_eliminatory_text = $has_eliminatory ? 'Yes' : 'No';
 
-            // Insert or update overall average
-            $stmt = $conn->prepare("
-                INSERT INTO student_overall_average (student_id, class_id, overall_average, result)
-                VALUES (?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE 
-                    overall_average = ?, 
-                    result = ?, 
-                    calculation_date = CURRENT_TIMESTAMP
-            ");
-            $stmt->bind_param("iidssd", 
-                $student_id, $class_id, $overall_avg, $result,
-                $overall_avg, $result
-            );
-            $stmt->execute();
-
-            $results[$student_id] = [
+            $results[] = [
                 'name' => $full_name,
-                'average' => $overall_avg,
-                'passed' => $result === 'passed',
-                'subjects_below_12' => $subjects_below_12,
-                'has_eliminatory' => $has_eliminatory
+                'average' => $overall_average,
+                'below_12' => $subjects_below_12,
+                'eliminatory' => $has_eliminatory_text,
+                'result' => $result
             ];
         }
 
@@ -90,29 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
     } catch (Exception $e) {
         $conn->rollback();
         die("Error processing evaluation: " . $e->getMessage());
-    }
-}
-
-// Get previously calculated results if available
-if (isset($class_id)) {
-    $saved_results = $conn->query("
-        SELECT s.id, s.full_name, soa.overall_average, soa.result, soa.calculation_date
-        FROM student_overall_average soa
-        JOIN students s ON soa.student_id = s.id
-        WHERE soa.class_id = $class_id
-        ORDER BY s.full_name
-    ");
-    
-    // If we have saved results but didn't just calculate new ones
-    if (!isset($results) && $saved_results->num_rows > 0) {
-        while ($row = $saved_results->fetch_assoc()) {
-            $results[$row['id']] = [
-                'name' => $row['full_name'],
-                'average' => $row['overall_average'],
-                'passed' => $row['result'] === 'passed',
-                'calculation_date' => $row['calculation_date']
-            ];
-        }
     }
 }
 ?>
@@ -240,14 +241,14 @@ if (isset($class_id)) {
                         <th>Result</th>
                         <th>Details</th>
                     </tr>
-                    <?php foreach ($results as $student_id => $result): ?>
+            <?php foreach ($results as $result): ?>
                     <tr>
                         <td><?= htmlspecialchars($result['name']) ?></td>
                         <td><?= $result['average'] ?></td>
-                        <td><?= $result['subjects_below_12'] ?? 'N/A' ?></td>
-                        <td><?= isset($result['has_eliminatory']) ? ($result['has_eliminatory'] ? 'Yes' : 'No') : 'N/A' ?></td>
-                        <td class="<?= $result['passed'] ? 'passed' : 'failed' ?>">
-                            <?= $result['passed'] ? 'Passed' : 'Failed' ?>
+                        <td><?= $result['below_12'] ?></td>
+                        <td><?= $result['eliminatory'] ?></td>
+                        <td class="<?= strtolower($result['result']) ?>">
+                            <?= $result['result'] ?>
                         </td>
                         <td>
                             <a href="student_details.php?student_id=<?= $student_id ?>&class_id=<?= $class_id ?>" class="details-btn">
@@ -255,7 +256,7 @@ if (isset($class_id)) {
                             </a>
                         </td>
                     </tr>
-                    <?php endforeach; ?>
+            <?php endforeach; ?>
                 </table>
             </div>
         <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
