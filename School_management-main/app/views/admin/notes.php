@@ -16,6 +16,8 @@ $classes = $conn->query("SELECT id, name FROM classes ORDER BY name");
 // Initialize results array
 $results = [];
 
+$sort_by = $_POST['sort_by'] ?? 'name'; // Default sort
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
     $class_id = $conn->real_escape_string($_POST['class_id']);
 
@@ -102,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
             $has_eliminatory_text = $has_eliminatory ? 'Yes' : 'No';
 
             $results[] = [
+                'id' => $student_id,
                 'name' => $full_name,
                 'average' => $overall_average,
                 'below_12' => $subjects_below_12,
@@ -111,6 +114,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
         }
 
         $conn->commit();
+
+        // Sort results based on admin choice
+        usort($results, function($a, $b) use ($sort_by) {
+            if ($sort_by === 'average') {
+                return $b['average'] <=> $a['average']; // Descending
+            } elseif ($sort_by === 'result') {
+                return strcmp($a['result'], $b['result']); // Ascending: Failed then Passed
+            } else {
+                return strcmp($a['name'], $b['name']); // Default: name ascending
+            }
+        });
+
     } catch (Exception $e) {
         $conn->rollback();
         die("Error processing evaluation: " . $e->getMessage());
@@ -122,7 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Evaluation</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" type="image/png" href="../images/logo.png">
@@ -135,36 +149,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
             padding: 1.5rem;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        
         select, button {
             padding: 0.75rem 1rem;
             font-size: 1rem;
             border-radius: 4px;
             border: 1px solid #ddd;
+            margin-right: 1rem;
         }
-        
         button {
             background-color: #6c5ce7;
             color: white;
             border: none;
             cursor: pointer;
-            margin-left: 1rem;
         }
-        
         button:hover {
             background-color: #5c4ce7;
         }
-        
-        .passed {
-            color: #28a745;
-            font-weight: bold;
-        }
-        
-        .failed {
-            color: #dc3545;
-            font-weight: bold;
-        }
-        
+        .passed { color: #28a745; font-weight: bold; }
+        .failed { color: #dc3545; font-weight: bold; }
         .details-btn {
             background-color: #17a2b8;
             color: white;
@@ -173,21 +175,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
             text-decoration: none;
             display: inline-block;
         }
-        
         .details-btn:hover {
             background-color: #138496;
         }
-        .calculation-info {
+        table {
+            width: 90%;
+            margin: 1rem auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 0.75rem;
             text-align: center;
-            margin: 1rem 0;
-            color: #666;
-            font-style: italic;
         }
     </style>
 </head>
 <body>
-
-    <!-- Navigation -->
     <nav>
         <div class="logo-container">
             <img src="../images/logo.png" alt="School Logo">
@@ -220,17 +223,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
                         </option>
                     <?php endwhile; ?>
                 </select>
+
+                <select name="sort_by">
+                    <option value="name" <?= $sort_by === 'name' ? 'selected' : '' ?>>Sort by Name</option>
+                    <option value="average" <?= $sort_by === 'average' ? 'selected' : '' ?>>Sort by Average</option>
+                    <option value="result" <?= $sort_by === 'result' ? 'selected' : '' ?>>Sort by Result</option>
+                </select>
+
                 <button type="submit">Evaluate</button>
             </form>
         </div>
 
-        <?php if (isset($results) && !empty($results)): ?>
-            <?php if (isset($calculation_date)): ?>
-                <div class="calculation-info">
-                    Results calculated on: <?= date('Y-m-d H:i:s', strtotime($calculation_date)) ?>
-                </div>
-            <?php endif; ?>
-            
+        <?php if (!empty($results)): ?>
             <div class="students-container">
                 <table>
                     <tr>
@@ -241,22 +245,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['class_id'])) {
                         <th>Result</th>
                         <th>Details</th>
                     </tr>
-            <?php foreach ($results as $result): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($result['name']) ?></td>
-                        <td><?= $result['average'] ?></td>
-                        <td><?= $result['below_12'] ?></td>
-                        <td><?= $result['eliminatory'] ?></td>
-                        <td class="<?= strtolower($result['result']) ?>">
-                            <?= $result['result'] ?>
-                        </td>
-                        <td>
-                            <a href="student_details.php?student_id=<?= $student_id ?>&class_id=<?= $class_id ?>" class="details-btn">
-                                View Details
-                            </a>
-                        </td>
-                    </tr>
-            <?php endforeach; ?>
+                    <?php foreach ($results as $result): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($result['name']) ?></td>
+                            <td><?= $result['average'] ?></td>
+                            <td><?= $result['below_12'] ?></td>
+                            <td><?= $result['eliminatory'] ?></td>
+                            <td class="<?= strtolower($result['result']) ?>"><?= $result['result'] ?></td>
+                            <td>
+                                <a href="student_details.php?student_id=<?= $result['id'] ?>&class_id=<?= $class_id ?>" class="details-btn">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </table>
             </div>
         <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
