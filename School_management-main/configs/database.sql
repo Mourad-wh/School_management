@@ -793,9 +793,8 @@ UPDATE students
 SET username = 'student', password = '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM'
 WHERE username = 'yelamrani';
 
-UPDATE admin
-SET password = '$argon2i$v=19$m=65536,t=4,p=1$Um9pWDJ6QXQzU0hZYnJJeA$Q7QXajqRJFsZ3f3gxeGv8yLG0S4SogmMIETZc13v1o4'
-WHERE username = 'admin';
+INSERT INTO admin (username, password, email, phone, school_id, id, full_name)
+VALUES ('admin', '$argon2i$v=19$m=65536,t=4,p=1$Um9pWDJ6QXQzU0hZYnJJeA$Q7QXajqRJFsZ3f3gxeGv8yLG0S4SogmMIETZc13v1o4', 'admin@example.com', '0655818229', '2202387', '10', 'admin');
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
