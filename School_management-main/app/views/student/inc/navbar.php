@@ -210,7 +210,6 @@ nav img:hover {
             <li><a href="index.php">Tableau de bord</a></li>
             <li><a href="grade.php">Grade Summary</a></li>
             <li><a href="exam.php">Annonce des examens</a></li>
-            <li><a href="results.php">bulletin</a></li>
             <li><a href="pass.php">Changer le mot de passe</a></li>
             <li><a href="logout.php" class="login-btn">Déconnexion <i class="fas fa-sign-out-alt"></i></a></li>
         </ul>
