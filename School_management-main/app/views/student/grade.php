@@ -93,11 +93,10 @@ try {
 
 // Fonction de calcul d'appréciation
 function getAppreciation($grade) {
-    if ($grade >= 16) return 'Excellent';
-    elseif ($grade >= 14) return 'Très bien';
-    elseif ($grade >= 12) return 'Bien';
-    elseif ($grade >= 10) return 'Satisfaisant';
-    else return 'À améliorer';
+    if ($grade >= 16) return 'validé';
+    elseif ($grade >= 14) return 'validé';
+    elseif ($grade >= 12) return 'validé';
+    else return 'non validé';
 }
 
 // Fonction qui retourne la couleur du badge selon la note
@@ -226,7 +225,7 @@ function getBadgeColor($grade) {
             
             <?php if ($subject_count > 0): ?>
                 <div class="global-stats">
-                    <h4 class="mb-0">Moyenne générale</h4>
+                    <h4 class="mb-0">votre Moyenne générale pour le moment</h4>
                     <h2 class="display-4 mb-0"><?= number_format($global_average, 2) ?>/20</h2>
                     <span class="badge <?= getBadgeColor($global_average) ?>">
                         <?= getAppreciation($global_average) ?>
