@@ -68,28 +68,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Fonction helper pour valider une note
 function validateGrade($grade) {
-    return filter_var($grade, FILTER_VALIDATE_FLOAT, [
+    if ($grade === '' || $grade === null) {
+        return null;
+    }
+    $validated = filter_var($grade, FILTER_VALIDATE_FLOAT, [
         'options' => ['min_range' => 0, 'max_range' => 20]
     ]);
+    return $validated !== false ? $validated : null;
 }
+
 
 // Fonction helper pour mettre à jour ou insérer une note
 function updateOrInsertGrade($conn, $student_id, $subject_id, $exam, $qcm, $participation) {
     $checkSql = "SELECT id FROM notes WHERE student_id = ? AND subject_id = ?";
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->execute([$student_id, $subject_id]);
-    
+
     if ($checkStmt->fetch()) {
+        // UPDATE
         $sql = "UPDATE notes SET grade = ?, qcm = ?, participation = ? 
                 WHERE student_id = ? AND subject_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            $exam !== null ? $exam : null,
+            $qcm !== null ? $qcm : null,
+            $participation !== null ? $participation : null,
+            $student_id,
+            $subject_id
+        ]);
     } else {
+        // INSERT
         $sql = "INSERT INTO notes (student_id, subject_id, grade, qcm, participation)
                 VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            $student_id,
+            $subject_id,
+            $exam !== null ? $exam : null,
+            $qcm !== null ? $qcm : null,
+            $participation !== null ? $participation : null
+        ]);
     }
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$exam, $qcm, $participation, $student_id, $subject_id]);
 }
+
+
+
 
 // Affichage
 $success = filter_input(INPUT_GET, 'success', FILTER_VALIDATE_INT) === 1;
