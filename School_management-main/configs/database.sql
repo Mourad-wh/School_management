@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 11 mai 2025 à 14:02
+-- Généré le : dim. 18 mai 2025 à 20:00
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -57,8 +57,7 @@ INSERT INTO `absence` (`id`, `student_id`, `class_id`, `date`, `hours_absent`, `
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `school_id` int(11) DEFAULT NULL,
@@ -70,8 +69,10 @@ CREATE TABLE `admin` (
 -- Déchargement des données de la table `admin`
 --
 
-INSERT INTO `admin` (`id`, `first_name`, `last_name`, `email`, `phone`, `school_id`, `password`, `username`) VALUES
-(1, 'Mourad', 'El Ouatik', 'mouradelouatik05@gmail.com', '0623189074', 2202387, 'mouradelouatik', 'mourad');
+INSERT INTO `admin` (`id`, `full_name`, `email`, `phone`, `school_id`, `password`, `username`) VALUES
+(1, 'El Ouatik', 'mouradelouatik05@gmail.com', '0623189074', 2202387, '$argon2i$v=19$m=65536,t=4,p=1$Um9pWDJ6QXQzU0hZYnJJeA$Q7QXajqRJFsZ3f3gxeGv8yLG0S4SogmMIETZc13v1o4', 'mourad'),
+(5, 'Saad CHAOULID', 'saadchaoulid0@example.com', '0655818229', 2202387, '$argon2i$v=19$m=65536,t=4,p=1$eHdKdWlMM0F0T2JaR0prYw$xQG8VAP7WzJg9gpsXhqNoqUMxYEH+SA8kabhf0guq2E', 'saad'),
+(10, 'admin', 'admin@example.com', '0655818229', 2202387, '$argon2i$v=19$m=65536,t=4,p=1$Um9pWDJ6QXQzU0hZYnJJeA$Q7QXajqRJFsZ3f3gxeGv8yLG0S4SogmMIETZc13v1o4', 'admin');
 
 -- --------------------------------------------------------
 
@@ -199,7 +200,12 @@ INSERT INTO `notes` (`id`, `student_id`, `subject_id`, `grade`, `exam_id`, `qcm`
 (20, 34, 13, 16.50, 10, 15.50, 17.00, 20),
 (21, 35, 13, 12.75, 10, 11.50, 13.00, 20),
 (22, 36, 13, 18.25, 10, 17.00, 18.50, 20),
-(23, 37, 13, 14.50, 10, 13.50, 15.00, 20);
+(23, 37, 13, 14.50, 10, 13.50, 15.00, 20),
+(24, 23, 13, 18.00, NULL, 16.00, 19.00, 0),
+(25, 24, 13, NULL, NULL, NULL, NULL, 0),
+(26, 25, 13, NULL, NULL, NULL, NULL, 0),
+(27, 26, 13, NULL, NULL, NULL, NULL, 0),
+(28, 27, 13, NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -256,41 +262,41 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `email`, `phone`, `school_id`, `full_name`, `password`, `username`) VALUES
-(23, 'student1@ensam.ma', '0611111111', 2202387, 'Yassin El Amrani', '$2y$10$pass1', 'yelamrani'),
-(24, 'student2@ensam.ma', '0622222222', 2202387, 'Hafsa Bouzidi', '$2y$10$pass2', 'hbouzidi'),
-(25, 'student3@ensam.ma', '0633333333', 2202387, 'Omar El Fassi', '$2y$10$pass3', 'oelfassi'),
-(26, 'student4@ensam.ma', '0644444444', 2202387, 'Amina Cherkaoui', '$2y$10$pass4', 'acherkaoui'),
-(27, 'student5@ensam.ma', '0655555555', 2202387, 'Mehdi Benjelloun', '$2y$10$pass5', 'mbenjelloun'),
-(28, 'student6@ensam.ma', '0666666666', 2202387, 'Nadia El Mansouri', '$2y$10$pass6', 'nemansouri'),
-(29, 'student7@ensam.ma', '0677777777', 2202387, 'Karim Bennis', '$2y$10$pass7', 'kbennis'),
-(30, 'student8@ensam.ma', '0688888888', 2202387, 'Fatima Zahra El Amrani', '$2y$10$pass8', 'fzelamrani'),
-(31, 'student9@ensam.ma', '0699999999', 2202387, 'Youssef Bouzidi', '$2y$10$pass9', 'ybouzidi'),
-(32, 'student10@ensam.ma', '0600000000', 2202387, 'Leila El Fassi', '$2y$10$pass10', 'lelfassi'),
-(33, 'student11@ensam.ma', '0612345678', 2202387, 'Ahmed Cherkaoui', '$2y$10$pass11', 'acherkaoui2'),
-(34, 'student12@ensam.ma', '0623456789', 2202387, 'Samira Benjelloun', '$2y$10$pass12', 'sbenjelloun'),
-(35, 'student13@ensam.ma', '0634567890', 2202387, 'Hicham El Mansouri', '$2y$10$pass13', 'helmansouri'),
-(36, 'student14@ensam.ma', '0645678901', 2202387, 'Nadia Bennis', '$2y$10$pass14', 'nbennis2'),
-(37, 'student15@ensam.ma', '0656789012', 2202387, 'Mehdi El Amrani', '$2y$10$pass15', 'melamrani'),
-(38, 'student16@ensam.ma', '0667890123', 2202387, 'Fatima Bouzidi', '$2y$10$pass16', 'fbouzidi'),
-(39, 'student17@ensam.ma', '0678901234', 2202387, 'Omar El Fassi', '$2y$10$pass17', 'oelfassi2'),
-(40, 'student18@ensam.ma', '0689012345', 2202387, 'Amina Cherkaoui', '$2y$10$pass18', 'acherkaoui3'),
-(41, 'student19@ensam.ma', '0690123456', 2202387, 'Youssef Benjelloun', '$2y$10$pass19', 'ybenjelloun'),
-(42, 'student20@ensam.ma', '0601234567', 2202387, 'Leila El Mansouri', '$2y$10$pass20', 'lelmansouri'),
-(43, 'student21@ensam.ma', '0611122222', 2202387, 'Karim Bennis', '$2y$10$pass21', 'kbennis2'),
-(44, 'student22@ensam.ma', '0622233333', 2202387, 'Hafsa El Amrani', '$2y$10$pass22', 'helamrani'),
-(45, 'student23@ensam.ma', '0633344444', 2202387, 'Yassin Bouzidi', '$2y$10$pass23', 'ybouzidi2'),
-(46, 'student24@ensam.ma', '0644455555', 2202387, 'Samira El Fassi', '$2y$10$pass24', 'selfassi'),
-(47, 'student25@ensam.ma', '0655566666', 2202387, 'Mehdi Cherkaoui', '$2y$10$pass25', 'mcherkaoui'),
-(48, 'student26@ensam.ma', '0666677777', 2202387, 'Nadia Benjelloun', '$2y$10$pass26', 'nbenjelloun'),
-(49, 'student27@ensam.ma', '0677788888', 2202387, 'Hicham El Mansouri', '$2y$10$pass27', 'helmansouri2'),
-(50, 'student28@ensam.ma', '0688899999', 2202387, 'Fatima Bennis', '$2y$10$pass28', 'fbennis'),
-(51, 'student29@ensam.ma', '0699900000', 2202387, 'Omar El Amrani', '$2y$10$pass29', 'oelamrani'),
-(52, 'student30@ensam.ma', '0600011111', 2202387, 'Amina Bouzidi', '$2y$10$pass30', 'abouzidi'),
-(53, 'student31@ensam.ma', '0611223344', 2202387, 'Youssef El Fassi', '$2y$10$pass31', 'yelfassi'),
-(54, 'student32@ensam.ma', '0622334455', 2202387, 'Leila Cherkaoui', '$2y$10$pass32', 'lcherkaoui2'),
-(55, 'student33@ensam.ma', '0633445566', 2202387, 'Karim Benjelloun', '$2y$10$pass33', 'kbenjelloun'),
-(56, 'student34@ensam.ma', '0644556677', 2202387, 'Samira El Mansouri', '$2y$10$pass34', 'selmansouri'),
-(57, 'student35@ensam.ma', '0655667788', 2202387, 'Mehdi Bennis', '$2y$10$pass35', 'mbennis');
+(23, 'student1@ensam.ma', '0611111111', 2202387, 'Yassin El Amrani', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'student'),
+(24, 'student2@ensam.ma', '0622222222', 2202387, 'Hafsa Bouzidi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'hbouzidi'),
+(25, 'student3@ensam.ma', '0633333333', 2202387, 'Omar El Fassi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'oelfassi'),
+(26, 'student4@ensam.ma', '0644444444', 2202387, 'Amina Cherkaoui', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'acherkaoui'),
+(27, 'student5@ensam.ma', '0655555555', 2202387, 'Mehdi Benjelloun', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'mbenjelloun'),
+(28, 'student6@ensam.ma', '0666666666', 2202387, 'Nadia El Mansouri', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'nemansouri'),
+(29, 'student7@ensam.ma', '0677777777', 2202387, 'Karim Bennis', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'kbennis'),
+(30, 'student8@ensam.ma', '0688888888', 2202387, 'Fatima Zahra El Amrani', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'fzelamrani'),
+(31, 'student9@ensam.ma', '0699999999', 2202387, 'Youssef Bouzidi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'ybouzidi'),
+(32, 'student10@ensam.ma', '0600000000', 2202387, 'Leila El Fassi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'lelfassi'),
+(33, 'student11@ensam.ma', '0612345678', 2202387, 'Ahmed Cherkaoui', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'acherkaoui2'),
+(34, 'student12@ensam.ma', '0623456789', 2202387, 'Samira Benjelloun', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'sbenjelloun'),
+(35, 'student13@ensam.ma', '0634567890', 2202387, 'Hicham El Mansouri', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'helmansouri'),
+(36, 'student14@ensam.ma', '0645678901', 2202387, 'Nadia Bennis', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'nbennis2'),
+(37, 'student15@ensam.ma', '0656789012', 2202387, 'Mehdi El Amrani', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'melamrani'),
+(38, 'student16@ensam.ma', '0667890123', 2202387, 'Fatima Bouzidi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'fbouzidi'),
+(39, 'student17@ensam.ma', '0678901234', 2202387, 'Omar El Fassi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'oelfassi2'),
+(40, 'student18@ensam.ma', '0689012345', 2202387, 'Amina Cherkaoui', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'acherkaoui3'),
+(41, 'student19@ensam.ma', '0690123456', 2202387, 'Youssef Benjelloun', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'ybenjelloun'),
+(42, 'student20@ensam.ma', '0601234567', 2202387, 'Leila El Mansouri', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'lelmansouri'),
+(43, 'student21@ensam.ma', '0611122222', 2202387, 'Karim Bennis', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'kbennis2'),
+(44, 'student22@ensam.ma', '0622233333', 2202387, 'Hafsa El Amrani', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'helamrani'),
+(45, 'student23@ensam.ma', '0633344444', 2202387, 'Yassin Bouzidi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'ybouzidi2'),
+(46, 'student24@ensam.ma', '0644455555', 2202387, 'Samira El Fassi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'selfassi'),
+(47, 'student25@ensam.ma', '0655566666', 2202387, 'Mehdi Cherkaoui', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'mcherkaoui'),
+(48, 'student26@ensam.ma', '0666677777', 2202387, 'Nadia Benjelloun', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'nbenjelloun'),
+(49, 'student27@ensam.ma', '0677788888', 2202387, 'Hicham El Mansouri', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'helmansouri2'),
+(50, 'student28@ensam.ma', '0688899999', 2202387, 'Fatima Bennis', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'fbennis'),
+(51, 'student29@ensam.ma', '0699900000', 2202387, 'Omar El Amrani', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'oelamrani'),
+(52, 'student30@ensam.ma', '0600011111', 2202387, 'Amina Bouzidi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'abouzidi'),
+(53, 'student31@ensam.ma', '0611223344', 2202387, 'Youssef El Fassi', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'yelfassi'),
+(54, 'student32@ensam.ma', '0622334455', 2202387, 'Leila Cherkaoui', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'lcherkaoui2'),
+(55, 'student33@ensam.ma', '0633445566', 2202387, 'Karim Benjelloun', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'kbenjelloun'),
+(56, 'student34@ensam.ma', '0644556677', 2202387, 'Samira El Mansouri', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'selmansouri'),
+(57, 'student35@ensam.ma', '0655667788', 2202387, 'Mehdi Bennis', '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM', 'mbennis');
 
 -- --------------------------------------------------------
 
@@ -384,7 +390,22 @@ INSERT INTO `student_overall_average` (`id`, `student_id`, `class_id`, `overall_
 (0, 54, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
 (0, 57, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
 (0, 56, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
-(0, 53, 24, 0.00, 'failed', '2025-05-11 11:58:27');
+(0, 53, 24, 0.00, 'failed', '2025-05-11 11:58:27'),
+(0, 26, 18, 18.00, 'passed', '2025-05-18 02:14:48'),
+(0, 24, 18, 16.75, 'passed', '2025-05-18 02:14:48'),
+(0, 27, 18, 15.50, 'passed', '2025-05-18 02:14:48'),
+(0, 25, 18, 12.25, 'passed', '2025-05-18 02:14:48'),
+(0, 23, 18, 14.50, 'passed', '2025-05-18 02:14:48'),
+(0, 26, 18, 18.00, 'passed', '2025-05-18 02:15:14'),
+(0, 24, 18, 16.75, 'passed', '2025-05-18 02:15:14'),
+(0, 27, 18, 15.50, 'passed', '2025-05-18 02:15:14'),
+(0, 25, 18, 12.25, 'passed', '2025-05-18 02:15:14'),
+(0, 23, 18, 14.50, 'passed', '2025-05-18 02:15:14'),
+(0, 26, 18, 18.00, 'passed', '2025-05-18 02:16:27'),
+(0, 24, 18, 16.75, 'passed', '2025-05-18 02:16:27'),
+(0, 27, 18, 15.50, 'passed', '2025-05-18 02:16:27'),
+(0, 25, 18, 12.25, 'passed', '2025-05-18 02:16:27'),
+(0, 23, 18, 14.50, 'passed', '2025-05-18 02:16:27');
 
 -- --------------------------------------------------------
 
@@ -432,13 +453,13 @@ CREATE TABLE `teachers` (
 --
 
 INSERT INTO `teachers` (`id`, `email`, `phone`, `school_id`, `full_name`, `password`, `username`) VALUES
-(9, 'prof1@ensam.ma', '0612345678', 2202387, 'Ahmed Benali', '$2y$10$abc123', 'abenali'),
-(10, 'prof2@ensam.ma', '0623456789', 2202387, 'Fatima Zahra', '$2y$10$def456', 'fzahra'),
-(11, 'prof3@ensam.ma', '0634567890', 2202387, 'Karim El Mansouri', '$2y$10$ghi789', 'kmansouri'),
-(12, 'prof4@ensam.ma', '0645678901', 2202387, 'Leila Cherkaoui', '$2y$10$jkl012', 'lcherkaoui'),
-(13, 'prof5@ensam.ma', '0656789012', 2202387, 'Youssef Amrani', '$2y$10$mno345', 'yamrani'),
-(14, 'prof6@ensam.ma', '0667890123', 2202387, 'Nadia Bennis', '$2y$10$pqr678', 'nbennis'),
-(15, 'prof7@ensam.ma', '0678901234', 2202387, 'Mehdi El Fassi', '$2y$10$stu901', 'melfassi');
+(9, 'prof1@ensam.ma', '0612345678', 2202387, 'Ahmed Benali', '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI', 'abenali'),
+(10, 'prof2@ensam.ma', '0623456789', 2202387, 'Fatima Zahra', '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI', 'teacher'),
+(11, 'prof3@ensam.ma', '0634567890', 2202387, 'Karim El Mansouri', '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI', 'kmansouri'),
+(12, 'prof4@ensam.ma', '0645678901', 2202387, 'Leila Cherkaoui', '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI', 'lcherkaoui'),
+(13, 'prof5@ensam.ma', '0656789012', 2202387, 'Youssef Amrani', '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI', 'yamrani'),
+(14, 'prof6@ensam.ma', '0667890123', 2202387, 'Nadia Bennis', '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI', 'nbennis'),
+(15, 'prof7@ensam.ma', '0678901234', 2202387, 'Mehdi El Fassi', '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI', 'melfassi');
 
 -- --------------------------------------------------------
 
@@ -457,6 +478,8 @@ CREATE TABLE `teacher_class` (
 --
 
 INSERT INTO `teacher_class` (`id`, `teacher_id`, `class_id`) VALUES
+(9, 10, 18),
+(10, 11, 18),
 (17, 9, 18),
 (18, 10, 19),
 (19, 11, 20),
@@ -616,7 +639,7 @@ ALTER TABLE `absence`
 -- AUTO_INCREMENT pour la table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `average`
@@ -640,7 +663,7 @@ ALTER TABLE `exam`
 -- AUTO_INCREMENT pour la table `notes`
 --
 ALTER TABLE `notes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT pour la table `school`
@@ -774,28 +797,6 @@ ALTER TABLE `teacher_subject`
   ADD CONSTRAINT `teacher_subject_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`),
   ADD CONSTRAINT `teacher_subject_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`);
 COMMIT;
-
--- Remove first_name column
-ALTER TABLE admin DROP COLUMN first_name;
-
--- Rename last_name to full_name
-ALTER TABLE admin CHANGE COLUMN last_name full_name VARCHAR(100) NOT NULL;
-
-INSERT INTO admin (username, password, email, phone, school_id, id, full_name)
-VALUES ('saad', '$argon2i$v=19$m=65536,t=4,p=1$eHdKdWlMM0F0T2JaR0prYw$xQG8VAP7WzJg9gpsXhqNoqUMxYEH+SA8kabhf0guq2E', 'saadchaoulid0@example.com', '0655818229', '2202387', '5', 'Saad CHAOULID');
-
-
-UPDATE teachers
-SET username = 'teacher', password = '$argon2i$v=19$m=65536,t=4,p=1$MWxtLjVQQWE2ZzFHSGEuWA$Uy0WpjweM6JA7HgNrei8cM5cvd+naJrnH6LQAyZyCLI'
-WHERE username = 'fzahra';
-
-UPDATE students
-SET username = 'student', password = '$argon2i$v=19$m=65536,t=4,p=1$MW5IZmc2cEJEMmEya2Q0eA$IexDq6pFrucpN8rfhNpV/a2cpyjWETNhnuHXvZHt3ZM'
-WHERE username = 'yelamrani';
-
-INSERT INTO admin (username, password, email, phone, school_id, id, full_name)
-VALUES ('admin', '$argon2i$v=19$m=65536,t=4,p=1$Um9pWDJ6QXQzU0hZYnJJeA$Q7QXajqRJFsZ3f3gxeGv8yLG0S4SogmMIETZc13v1o4', 'admin@example.com', '0655818229', '2202387', '10', 'admin');
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
