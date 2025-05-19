@@ -1,9 +1,11 @@
 <?php 
-// Connexion à la base de données
 $host = "127.0.0.1";
 $dbname = "school_db";
 $username = "root";
 $password = "";
+
+$error_message = '';
+$success_message = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
@@ -17,7 +19,6 @@ try {
 
     $student_id = $_SESSION['student_id'];
 
-    // Récupérer les infos de l'étudiant pour l'affichage
     $stmt = $pdo->prepare("SELECT full_name, email FROM students WHERE id = ?");
     $stmt->execute([$student_id]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -26,53 +27,39 @@ try {
     die("Erreur de connexion : " . $e->getMessage());
 }
 
-// Vérification si le formulaire est soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $old_pass = $_POST['old_pass'] ?? '';
     $new_pass = $_POST['new_pass'] ?? '';
     $c_new_pass = $_POST['c_new_pass'] ?? '';
 
-    // Validation des mots de passe
     if (empty($old_pass)) {
-        header("Location: change-password.php?perror=Ancien mot de passe requis");
-        exit;
-    }
-    
-    if ($new_pass !== $c_new_pass) {
-        header("Location: change-password.php?perror=Les mots de passe ne correspondent pas");
-        exit;
-    }
+        $error_message = "Ancien mot de passe requis";
+    } elseif ($new_pass !== $c_new_pass) {
+        $error_message = "Les mots de passe ne correspondent pas";
+    } elseif (strlen($new_pass) < 8) {
+        $error_message = "Le mot de passe doit contenir au moins 8 caractères";
+    } else {
+        try {
+            $stmt = $pdo->prepare("SELECT password FROM students WHERE id = ?");
+            $stmt->execute([$student_id]);
+            $student_pass = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (strlen($new_pass) < 8) {
-        header("Location: change-password.php?perror=Le mot de passe doit contenir au moins 8 caractères");
-        exit;
-    }
+            if (!$student_pass || !password_verify($old_pass, $student_pass['password'])) {
+                $error_message = "Ancien mot de passe incorrect";
+            } else {
+                $hashed_password = password_hash($new_pass, PASSWORD_DEFAULT);
+                $update_stmt = $pdo->prepare("UPDATE students SET password = ? WHERE id = ?");
+                $update_stmt->execute([$hashed_password, $student_id]);
 
-    try {
-        // Vérification ancien mot de passe
-        $stmt = $pdo->prepare("SELECT password FROM students WHERE id = ?");
-        $stmt->execute([$student_id]);
-        $student_pass = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$student_pass || !password_verify($old_pass, $student_pass['password'])) {
-            header("Location: change-password.php?perror=Ancien mot de passe incorrect");
-            exit;
+                $success_message = "Mot de passe mis à jour avec succès";
+            }
+        } catch(PDOException $e) {
+            $error_message = "Erreur de base de données";
         }
-
-        // Mise à jour du mot de passe
-        $hashed_password = password_hash($new_pass, PASSWORD_DEFAULT);
-        $update_stmt = $pdo->prepare("UPDATE students SET password = ? WHERE id = ?");
-        $update_stmt->execute([$hashed_password, $student_id]);
-
-        header("Location: change-password.php?psuccess=Mot de passe mis à jour avec succès");
-        exit;
-
-    } catch(PDOException $e) {
-        header("Location: change-password.php?perror=Erreur de base de données");
-        exit;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -192,19 +179,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <div class="password-body">
-                <?php if (isset($_GET['perror'])): ?>
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        <i class="bi bi-exclamation-triangle-fill"></i> <?= htmlspecialchars($_GET['perror']) ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
-                
-                <?php if (isset($_GET['psuccess'])): ?>
-                    <div class="alert alert-success alert-dismissible fade show">
-                        <i class="bi bi-check-circle-fill"></i> <?= htmlspecialchars($_GET['psuccess']) ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
+                <?php if (!empty($error_message)): ?>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="bi bi-exclamation-triangle-fill"></i> <?= htmlspecialchars($error_message) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<?php endif; ?>
+
+<?php if (!empty($success_message)): ?>
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle-fill"></i> <?= htmlspecialchars($success_message) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<?php endif; ?>
+
+
 
                 <form method="post">
                     <div class="mb-4">
